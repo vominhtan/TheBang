@@ -1,0 +1,12 @@
+package com.vominhtan1988.mybang.model.role;
+
+import com.vominhtan1988.mybang.Resources;
+import com.vominhtan1988.mybang.model.Role;
+
+public class OutLaw extends Role{
+	
+	public OutLaw(){
+		super("Sheriff","Canh sat", Resources.getInstance().r_sherriff);
+	}
+
+}

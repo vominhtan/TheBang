@@ -1,0 +1,91 @@
+package com.vominhtan1988.mybang.model;
+
+import java.awt.Point;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+
+public abstract class Character extends Sprite{
+	// Vi tri
+	public Vector2 position = new Vector2();
+
+	private Vector2 prePosition;
+	private Vector2 targetPosition;
+	private boolean reached = true;
+	private float min_distance = 0;
+	public void setTargetPosition(Vector2 targetPosition) {
+		this.targetPosition = targetPosition;
+		Vector2 subvetor = targetPosition.cpy().sub(prePosition).mul(-1);
+		float angle  = subvetor.angle();
+		acceleration.rotate(angle);
+		velocity = new Vector2(30f,0f);
+		velocity.setAngle(targetPosition.cpy().sub(prePosition).div(10).angle());
+		velocity_default.setAngle(velocity.angle());
+		reached = false;	
+		
+	}
+	private float epsilon =1f;	
+	// toc do
+	public Vector2 velocity = new Vector2(); // unit: px/s
+	public Vector2 velocity_default = new Vector2(4,0); // unit: px/s
+	// gia toc 
+	public Vector2 acceleration = new Vector2(4,0); // unit: px/s2	
+	// moving frame
+	public int frame = 60;
+
+	private float time = 0.0f;
+	public int MaxHealthPoint;
+	public String Name;	
+	public Character(String name,Vector2 position,int maxHealthPoint,Sprite sprite) {	
+		super(sprite.getTexture());		
+		this.position.set(position);		
+		this.prePosition = position;	
+		this.targetPosition = position;
+		this.Name = name;
+		this.MaxHealthPoint = maxHealthPoint;		
+	}
+	@Override
+	public void draw(SpriteBatch spriteBatch) {		
+
+
+		if (!reached){
+			Vector2 new_point = position;			
+			velocity.add(acceleration);
+			new_point.add(velocity);
+			}
+			
+		
+		}
+		if (!reached){
+			if (epsilonEqual(position,targetPosition,velocity.len())){
+				prePosition = position;
+				position = targetPosition;
+				acceleration = new Vector2(4,0);
+				velocity = new Vector2();
+				reached = true;
+				
+			}			
+		}		
+		BitmapFont font = new BitmapFont();
+		font.draw(spriteBatch,velocity.len() +"px/f",this.getBoundingRectangle().x,this.getBoundingRectangle().y);		
+		this.setPosition(position.x, position.y);		
+		super.draw(spriteBatch);
+		
+	}	
+
+	private boolean epsilonEqual(Vector2 v1,Vector2 v2,float epsilon){
+		float dx = Math.abs(v1.x-v2.x);
+		float dy = Math.abs(v1.y-v2.y);
+
+		if (dx<=epsilon && dy<=epsilon){
+			return true;
+		}
+		return false;
+
+	}
+
+}

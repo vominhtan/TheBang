@@ -1,0 +1,21 @@
+package com.vominhtan1988.mybang.model.cards;
+
+import com.badlogic.gdx.math.Vector2;
+import com.vominhtan1988.mybang.Resources;
+
+public class Panico extends NormalCard implements Cloneable{
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException 
+	{
+		return new Panico();
+	}
+
+	public Panico() {
+		super("Birra","Beer",Resources.getInstance().b_birra,"Base");
+	}
+	public Panico(Vector2 location) {
+		super("Birra",location,"Beer",Resources.getInstance().b_birra,"Base");
+	}
+	
+}

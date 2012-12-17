@@ -1,0 +1,17 @@
+package com.vominhtan1988.mybang.model;
+import java.util.concurrent.LinkedBlockingDeque;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.vominhtan1988.mybang.Resources;
+
+public class PointCard extends Card{
+	
+	LinkedBlockingDeque<Float> angles = new LinkedBlockingDeque<Float>();	
+	public PointCard() {
+		super("PointCard","BaiMau",)
+	}	
+
+}

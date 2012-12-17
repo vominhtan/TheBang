@@ -1,0 +1,347 @@
+package com.vominhtan1988.mybang.model;
+
+import java.awt.Point;
+import java.util.ArrayList;
+
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Plane;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.math.collision.Ray;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.utils.Logger;
+import com.vominhtan1988.mybang.CameraEvent;
+import com.vominhtan1988.mybang.ICameraEventListener;
+import com.vominhtan1988.mybang.MyCamera;
+import com.vominhtan1988.mybang.Resources;
+import com.vominhtan1988.mybang.model.cards.Bang;
+import com.vominhtan1988.mybang.model.role.Sheriff;
+
+public class Player extends SpriteBatch implements InputProcessor,ICameraEventListener{
+	public enum ShowLifePointStyle{
+		BulletCylinder,
+		Card
+	}
+	public String name;
+	public int currentHealthPoint = 0;
+	public Role role;
+	private Character character;	
+	public Card pointCard = new PointCard(); 
+	public int[] pointStepHeight = new int[]{163,119,95,68,40,13};
+	private ArrayList<Card> handCards = new ArrayList<Card>();
+	private ArrayList<Card> equipmentCards = new ArrayList<Card>();
+	private ArrayList<Card> trapCards = new ArrayList<Card>();
+	public int numberOfShotAvailable = 1;
+	public Phrase currentPhrase;
+	public Player leftPlayer;
+	public Player rightPlayer;		
+	public Vector2 playerLocation = new Vector2(0,0);
+
+	public int location = 1;	
+	// Bullet Cylinder
+	private static final int        FRAME_COLS = 6;         // #1
+	private static final int        FRAME_ROWS = 5;         // #2
+	Texture                         bulletCylinderSheet;              // #4
+	TextureRegion[][]               bulletCylinderFrames;             // #5
+	TextureRegion[]                 bulletCylinderFrames2;             // #5
+	TextureRegion                   bulletCylinderCurrentFrame;    
+	int frameIndex = 0;
+	int deltaIndex = 1;
+	int maxFrame =26;
+	float frameTime = 0;
+	// Collision
+	Ray collisionRay;	
+	// Current card
+
+	ShowLifePointStyle showLifePointStyle = ShowLifePointStyle.Card; 	
+	private Card handCardClick;
+	public void setHandCardClick(Card card){
+		if (handCardClick == card){
+			handCardClick = null;
+		}
+		else handCardClick = card;		
+	};
+
+	public void resize(int width,int height){	
+		this.getProjectionMatrix().set(MyCamera.cam.combined);
+	}
+	public Player(String name) {
+		super();
+		MyCamera.addCameraEventListener(this);
+		this.name = name;			
+		this.getProjectionMatrix().set(MyCamera.cam.combined);	
+
+		bulletCylinderSheet = new Texture(Gdx.files.internal("data/spritepack/bullet_cylinder.png"),Format.RGBA8888,true);     // #9
+		bulletCylinderSheet.setFilter(TextureFilter.Linear,TextureFilter.MipMapLinearLinear);
+		TextureRegion[][] bulletCylinderFrames = TextureRegion.split(bulletCylinderSheet, bulletCylinderSheet.getWidth() / 
+				FRAME_COLS, bulletCylinderSheet.getHeight() / FRAME_ROWS);                                // #10
+		bulletCylinderFrames2 = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+		int index = 0;
+		for (int j = 0; j < FRAME_COLS; j++) {
+			for (int i = 0; i < FRAME_ROWS; i++) {                
+				bulletCylinderFrames2[index++] = bulletCylinderFrames[i][j];
+			}
+		}
+
+
+	}
+	public Character getCharacter() {
+		return character;
+	}
+	public void setCharacter(Character character) {
+		this.character = character;
+		currentHealthPoint += character.MaxHealthPoint;
+		character.setTargetPosition(new Vector2(0,pointStepHeight[currentHealthPoint]).add(playerLocation), MathUtils.random(-3, 3));		
+		this.character.setIsFaceUp(true);
+		this.pointCard.setTargetPosition(new Vector2(0,163).add(playerLocation), MathUtils.random(-3, 3));
+	}
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
+		if (role instanceof Sheriff){
+			currentHealthPoint+=1;
+			role.setIsFaceUp(true);
+		}	
+		else {
+			role.setIsFaceUp(true);
+		}
+		this.role.setTargetPosition(playerLocation,  MathUtils.random(-3, 3));	
+	}	
+	public void draw(float delta){
+		frameTime +=delta;
+
+
+		this.begin();
+		if (showLifePointStyle ==ShowLifePointStyle.Card)
+		{
+			pointCard.draw(this);
+		}
+
+		role.draw(this);		
+		// CharacterCard					
+		character.draw(this);
+
+		//equip cards
+		for (Card card : equipmentCards) {
+			card.draw(this);				
+		}		
+
+		//this.draw(character,0,(5-currentHealthPoint)*(character.getHeight()*card_scale*0.2f),0,0,character.getWidth(),character.getHeight(),card_scale,card_scale,0);
+
+		int i=0;
+		for (Card card : handCards) {
+			card.draw(this);
+			i++;			
+		}		
+
+		// PointCard
+
+		if (showLifePointStyle == ShowLifePointStyle.BulletCylinder)
+		{
+			if (frameTime>0.1){
+				bulletCylinderCurrentFrame = bulletCylinderFrames2[frameIndex];	
+				Sprite s = new Sprite(bulletCylinderCurrentFrame);								
+				s.setScale(0.4f);
+				s.setPosition(playerLocation.x-s.getWidth()*(1-s.getScaleX())/2,playerLocation.y-s.getHeight()*(1-s.getScaleY())/2);					
+				s.draw(this);
+
+
+				frameIndex+=deltaIndex;
+				if (frameIndex>=5 | frameIndex<=0){
+					deltaIndex = -deltaIndex;
+				}				
+				frameTime=0;
+			}
+			else {
+				bulletCylinderCurrentFrame = bulletCylinderFrames2[frameIndex];	
+				Sprite s = new Sprite(bulletCylinderCurrentFrame);					
+				s.setScale(0.4f);
+				s.setPosition(playerLocation.x-s.getWidth()*(1-s.getScaleX())/2,playerLocation.y-s.getHeight()*(1-s.getScaleY())/2);
+				s.draw(this);
+			}
+		}
+		this.end();			
+	}
+	// Tìm những người chơi trong tầm ngắm
+	public ArrayList<Player> avalaiblePlayerInSights (){
+		throw new UnsupportedOperationException();
+	};
+	// Tìm những người chơi trong tầm cho trước		
+	public ArrayList<Player> avalaiblePlayerBySight (int sight){
+		throw new UnsupportedOperationException();
+	};	
+	public void descreaseHealthPoint(int point){
+		currentHealthPoint -=point;
+		character.setTargetPosition(new Vector2(0,pointStepHeight[currentHealthPoint]).add(playerLocation), MathUtils.random(-3, 3));
+	}
+	public void increaseHealthPoint(int point){
+		currentHealthPoint +=point;
+		character.setTargetPosition(new Vector2(0,pointStepHeight[currentHealthPoint]).add(playerLocation), MathUtils.random(-3, 3));
+	}
+	@Override
+	public boolean keyDown(int keycode) {
+
+		return false;
+	}
+	@Override
+	public boolean keyUp(int keycode) {
+
+		return false;
+	}
+	@Override
+	public boolean keyTyped(char character) {
+
+		return false;
+	}
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		collisionRay =  MyCamera.cam.getPickRay(screenX,screenY);
+		if (Intersector.intersectRayBoundsFast(collisionRay, role.collisionBox)) {
+			this.role.setIsFaceUp(false);	
+			GameInstance.getInstance().deck.init();			
+		}
+		else if (Intersector.intersectRayBoundsFast(collisionRay, character.collisionBox)){			
+			System.out.println("CharaterClick");
+
+		}
+		else if(Intersector.intersectRayBoundsFast(collisionRay, pointCard.collisionBox)){			
+			System.out.println("PointCardClick: Button = " + button);	
+			switch (button) {
+			case 0:// Left
+				descreaseHealthPoint(1);
+				break;
+
+			default:// Right
+				increaseHealthPoint(1);
+				break;
+			}
+
+		}
+		else {
+			Card temp = null;
+			for (Card card : handCards) {
+				if (Intersector.intersectRayBoundsFast(collisionRay, card.collisionBox)) {
+					temp = card;					
+				}						
+			}		
+			if (temp!=null){
+				setHandCardClick(temp);		
+				updateHandCardsPosition();
+				System.out.println("Click on "+ temp.name);
+			}
+		}			
+
+		return false;
+	}
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
+		return false;
+	}
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+
+		return false;
+	}
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+
+		return false;
+	}
+	@Override
+	public boolean scrolled(int amount) {
+
+		return false;
+	}
+	@Override
+	public boolean CameraEventHandler(CameraEvent event) {
+		this.getProjectionMatrix().set(MyCamera.cam.combined);		
+		return false;
+	}
+	private void updateEquipCardsPosition(){
+		ArrayList<Card> temp = new ArrayList<Card>();
+		temp.addAll(equipmentCards);
+		temp.addAll(trapCards);
+		if (temp.isEmpty()) return;
+		int imax = temp.size();		
+		int i = 0;		
+		int y = 120,maxY = 2*imax;		
+		float deltaY = maxY*2/imax;
+		float max_angle = 30;
+		float delta_angle = 3;
+		float angle = (imax/2)*delta_angle;
+		if (angle<-max_angle){
+			delta_angle = max_angle/imax*2;
+			angle = max_angle;
+		}			
+
+		for (;i<imax;i++){								
+			temp.get(i).setTargetPosition(new Vector2(108+i*20,y).add(playerLocation),angle - (i*delta_angle)+MathUtils.random(-2, 2));						
+			if (y>=maxY){
+				deltaY = -deltaY;				
+			}
+			else if (y<0){
+				deltaY = -deltaY;
+			}
+			y+=deltaY;
+		}
+	}
+	private void updateHandCardsPosition(){
+		if (handCards.isEmpty()) return;
+		int imax = handCards.size();		
+		int i = 0;		
+		int y = 0,maxY = 2*imax;		
+		float deltaY = maxY*2/imax;
+		float max_angle = 30;
+		float delta_angle = 3;
+		float angle = (imax/2)*delta_angle;
+		if (angle<-max_angle){
+			delta_angle = max_angle/imax*2;
+			angle = max_angle;
+		}			
+
+		for (;i<imax;i++){	
+			if (handCards.get(i)==handCardClick){
+				handCards.get(i).setTargetPosition(new Vector2(108+i*20,y+130).add(playerLocation),angle - (i*delta_angle)+MathUtils.random(-2, 2));			
+				handCards.get(i).setIsFaceUp(true);
+			}
+			else{
+				handCards.get(i).setTargetPosition(new Vector2(108+i*20,y).add(playerLocation),angle - (i*delta_angle)+MathUtils.random(-2, 2));			
+				handCards.get(i).setIsFaceUp(true);
+			}
+			if (y>=maxY){
+				deltaY = -deltaY;				
+			}
+			else if (y<0){
+				deltaY = -deltaY;
+			}
+			y+=deltaY;
+		}
+	}
+	public void addCardToHandCard(Card card){
+		if (card==null)return;
+		handCards.add(card);
+		updateHandCardsPosition();
+	}
+	public void addCardToEquipCard(Card card){
+		if (card==null)return;
+		equipmentCards.add(card);
+		updateEquipCardsPosition();
+	}
+
+
+}

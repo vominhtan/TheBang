@@ -1,0 +1,53 @@
+sprite_cards1.png
+format: RGBA8888
+filter: MipMap,Linear
+repeat: none
+characterBack
+  rotate: false
+  xy: 0, 0
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+playcardBack
+  rotate: false
+  xy: 0, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+rolecardBack
+  rotate: false
+  xy: 0, 326
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+r_sheriff
+  rotate: false
+  xy: 108, 326
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_bang
+  rotate: false
+  xy: 108, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_volcanic
+  rotate: false
+  xy: 216, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+c_willy_the_kid
+  rotate: false
+  xy: 108, 0
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1 

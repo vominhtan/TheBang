@@ -1,0 +1,21 @@
+package com.vominhtan1988.mybang.model.cards;
+
+import com.badlogic.gdx.math.Vector2;
+import com.vominhtan1988.mybang.Resources;
+
+public class Remington extends EquipmentCard implements Cloneable{
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException 
+	{
+		return new Remington();
+	}
+
+	public Remington() {
+		super("RevCarabine","RevCarabine",Resources.getInstance().b_rev_carabine,"Base");
+	}
+	public Remington(Vector2 location) {
+		super("RevCarabine",location,"RevCarabine",Resources.getInstance().b_rev_carabine,"Base");
+	}
+	
+}

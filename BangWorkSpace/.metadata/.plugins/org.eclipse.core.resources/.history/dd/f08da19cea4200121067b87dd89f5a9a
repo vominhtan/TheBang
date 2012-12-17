@@ -1,0 +1,21 @@
+package com.vominhtan1988.mybang.model.cards;
+
+import com.badlogic.gdx.math.Vector2;
+import com.vominhtan1988.mybang.Resources;
+
+public class Indiani extends NormalCard implements Cloneable{
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException 
+	{
+		return new Indiani();
+	}
+
+	public Indiani() {
+		super("Gatling","Gatling",Resources.getInstance().b_gatling,"Base");
+	}
+	public Indiani(Vector2 location) {
+		super("Gatling",location,"Gatling",Resources.getInstance().b_gatling,"Base");
+	}
+	
+}

@@ -1,0 +1,179 @@
+sprite_cards1.png
+format: RGBA8888
+filter: MipMap,Linear
+repeat: none
+characterBack
+  rotate: false
+  xy: 0, 0
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+playcardBack
+  rotate: false
+  xy: 0, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+rolecardBack
+  rotate: false
+  xy: 0, 326
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+r_sheriff
+  rotate: false
+  xy: 108, 326
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_bang
+  rotate: false
+  xy: 108, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_volcanic
+  rotate: false
+  xy: 216, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_appaloosa
+  rotate: false
+  xy: 324, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_barile
+  rotate: false
+  xy: 432, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_birra
+  rotate: false
+  xy: 540, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+ b_rev_carabine
+  rotate: false
+  xy: 648, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+ b_cat_balou
+  rotate: false
+  xy: 756, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_diligenza
+  rotate: false
+  xy: 864, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_duello
+  rotate: false
+  xy: 972, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_dinamite
+  rotate: false
+  xy: 1080, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_emporio
+  rotate: false
+  xy: 1188, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_gatling
+  rotate: false
+  xy: 1296, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_indiani
+  rotate: false
+  xy: 1404, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_prigione
+  rotate: false
+  xy: 1512, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1
+b_mancato
+  rotate: false
+  xy: 1620, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1  
+b_mustang
+  rotate: false
+  xy: 1728, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1  
+b_panico
+  rotate: false
+  xy: 1836, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1 
+b_remington
+  rotate: false
+  xy: 1944, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1   
+b_saloon
+  rotate: false
+  xy: 2052, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1   
+b_saloon
+  rotate: false
+  xy: 2160, 163
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1    
+c_willy_the_kid
+  rotate: false
+  xy: 108, 0
+  size: 108, 163
+  orig: 108, 163
+  offset: 0, 0
+  index: -1 

@@ -1,0 +1,44 @@
+package com.vominhtan1988.mybang;
+
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
+import com.vominhtan1988.mybang.mainmenu.MainMenu;
+
+public class MyBang extends Game{
+
+	@Override
+	public void create() {
+		setScreen(new MainMenu(this));		
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub	
+		
+	}
+
+	@Override
+	public void resume() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

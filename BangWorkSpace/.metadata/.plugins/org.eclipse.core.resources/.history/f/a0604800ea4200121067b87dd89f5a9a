@@ -1,0 +1,21 @@
+package com.vominhtan1988.mybang.model.cards;
+
+import com.badlogic.gdx.math.Vector2;
+import com.vominhtan1988.mybang.Resources;
+
+public class Diligenza extends NormalCard implements Cloneable{
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException 
+	{
+		return new Diligenza();
+	}
+
+	public Diligenza() {
+		super("Cat Balou","Cat Balou",Resources.getInstance().b_cat_balou,"Base");
+	}
+	public Diligenza(Vector2 location) {
+		super("Cat Balou",location,"Cat Balou",Resources.getInstance().b_cat_balou,"Base");
+	}
+	
+}

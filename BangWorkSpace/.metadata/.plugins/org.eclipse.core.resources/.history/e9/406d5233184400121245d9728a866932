@@ -1,0 +1,95 @@
+package com.vominhtan1988.mybang.model;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Stack;
+import java.util.concurrent.ArrayBlockingQueue;
+
+import com.badlogic.gdx.math.Vector2;
+import com.vominhtan1988.mybang.model.cards.Bang;
+
+public class GameInstance {
+	public LinkedList<Player> players = new LinkedList<Player>();
+	public Stack<Card> discard_pile = new Stack<Card>();
+	public Deck deck = new Deck();  
+	public Player currentTurnPlayer;	
+	
+	private GameInstance() {
+		
+		Character character = CharacterFactory.getInstance().getCharacters().get(0);
+		Role role = RolesFactory.getInstance().getRoles().get(0);
+		
+		Player player1 = new Player("Tam");
+		player1.playerLocation = new Vector2(0,0);
+		player1.setRole(RolesFactory.getInstance().getRoles().get(1));
+		player1.setCharacter(CharacterFactory.getInstance().getCharacters().get(1));	 					
+		players.add(player1);
+		
+		player1 = new Player("Tam");
+		player1.playerLocation = new Vector2(300,0);
+		player1.setRole(RolesFactory.getInstance().getRoles().get(2));
+		player1.setCharacter(CharacterFactory.getInstance().getCharacters().get(2));	 					
+		players.add(player1);
+		
+		player1 = new Player("Tan");
+		player1.playerLocation = new Vector2(900,0);
+		player1.setRole(role);
+		player1.setCharacter(character);	 			
+		players.add(player1);			
+		
+		player1 = new Player("Tam");
+		player1.playerLocation = new Vector2(900,300);
+		player1.setRole(RolesFactory.getInstance().getRoles().get(3));
+		player1.setCharacter(CharacterFactory.getInstance().getCharacters().get(3));	 					
+		players.add(player1);
+		
+		player1 = new Player("Tam");
+		player1.playerLocation = new Vector2(300,470);
+		player1.setRole(RolesFactory.getInstance().getRoles().get(4));
+		player1.setCharacter(CharacterFactory.getInstance().getCharacters().get(4));	 					
+		players.add(player1);
+		
+		player1 = new Player("Tam");
+		player1.playerLocation = new Vector2(100,100);
+		player1.setRole(RolesFactory.getInstance().getRoles().get(5));
+		player1.setCharacter(CharacterFactory.getInstance().getCharacters().get(5));	 					
+		players.add(player1);
+		
+		player1 = new Player("Tam");
+		player1.playerLocation = new Vector2(0,100);
+		player1.setRole(RolesFactory.getInstance().getRoles().get(6));
+		player1.setCharacter(CharacterFactory.getInstance().getCharacters().get(6));	 					
+		players.add(player1);
+		
+		currentTurnPlayer = players.get(0);
+		
+	}
+	
+	public void resetGame(){		
+	};
+	public void startGame(){	
+		// Chia bài nhiệm vụ
+		// Chia bài nhân vật
+		// Chia bài chơi
+		
+	};
+	public void finishGame(){};
+	
+	private static GameInstance game;
+	
+	public static GameInstance getInstance(){
+		if (game == null){
+			game = new GameInstance();			
+		}
+		return game;		
+	}
+
+	public void nextTurn() {
+		int index = players.indexOf(currentTurnPlayer);
+		if (index>=players.size()-1){
+			index = 0;
+		}
+		else index +=1;
+		currentTurnPlayer = players.get(index);		
+	}
+
+}

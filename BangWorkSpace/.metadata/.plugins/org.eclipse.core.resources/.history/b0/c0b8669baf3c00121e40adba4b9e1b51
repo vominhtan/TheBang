@@ -1,0 +1,110 @@
+package com.vominhtan1988.mybang.model;
+
+import java.awt.Point;
+import java.util.ArrayList;
+
+import javax.xml.transform.TransformerFactory;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Transform;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
+import com.vominhtan1988.mybang.Resources;
+import com.vominhtan1988.mybang.model.role.Sheriff;
+
+public class Player extends SpriteBatch{
+	public String name;
+	public int currentHealthPoint = 0;
+	public Role role;
+	private Character character;	
+	public Sprite pointCard = Resources.getInstance().back_character;
+	public ArrayList<Card> handCards = new ArrayList<Card>();
+	public ArrayList<Card> equipmentCards = new ArrayList<Card>();
+	public ArrayList<Card> trapCards = new ArrayList<Card>();
+	public int numberOfShotAvailable = 1;
+	public Phrase currentPhrase;
+	public Player leftPlayer;
+	public Player rightPlayer;	
+	public Point position  = new Point(0, 420);
+	public int location = 1;
+	private int width = 800;
+	private int height = 480;
+	private float card_scale= 0.1f;
+	OrthographicCamera cam;
+	private float deltaTime = 0; 
+
+	public Player(String name) {
+		super();
+		this.name = name;
+		cam = new OrthographicCamera(width,height);		
+		cam.position.x = 400;
+		cam.position.y = 240;		
+		cam.update();		
+		this.getProjectionMatrix().set(cam.combined);
+		
+		
+		
+	}
+	public Character getCharacter() {
+		return character;
+	}
+	public void setCharacter(Character character) {
+		this.character = character;
+		currentHealthPoint = character.MaxHealthPoint;
+	}
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
+		if (role instanceof Sheriff){
+			currentHealthPoint+=1;
+		}
+	}
+	public void draw(float delta){
+		delta = Math.min(0.06f, Gdx.graphics.getDeltaTime());
+		
+		deltaTime += delta;
+
+		if (deltaTime < 1f)
+			return;
+		
+		this.setTransformMatrix(getTransformMatrix().setToTranslation(new Vector3(10,0,0)));		
+		this.begin();
+		// PointCard
+		this.draw(pointCard,0,pointCard.getHeight(),0,0,pointCard.getWidth(),pointCard.getHeight(),1,1,0);
+		// Role Card
+		this.draw(role,0,0,0,0,role.getWidth(),role.getHeight(),card_scale,card_scale,0);
+		// CharacterCard					
+		character.draw(this);
+		
+		//this.draw(character,0,(5-currentHealthPoint)*(character.getHeight()*card_scale*0.2f),0,0,character.getWidth(),character.getHeight(),card_scale,card_scale,0);
+
+		int i=0;
+		for (Card card : handCards) {
+			this.draw(card,(pointCard.getWidth()*card_scale)+(i*20),0,0,0,400,620,card_scale,card_scale,0);			
+			i++;			
+		}		
+		this.end();	
+
+
+	}
+	// Tìm những người chơi trong tầm ngắm
+	public ArrayList<Player> avalaiblePlayerInSights (){
+		throw new UnsupportedOperationException();
+	};
+	// Tìm những người chơi trong tầm cho trước		
+	public ArrayList<Player> avalaiblePlayerBySight (int sight){
+		throw new UnsupportedOperationException();
+	};	
+	public void descreaseHealthPoint(int point){
+		currentHealthPoint -=point;
+	}
+
+}

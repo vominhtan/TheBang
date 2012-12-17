@@ -1,0 +1,37 @@
+package com.vominhtan1988.mybang.model;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.utils.Array;
+import com.vominhtan1988.mybang.model.character.WillyTheKid;
+import com.vominhtan1988.mybang.model.role.Deputy;
+import com.vominhtan1988.mybang.model.role.OutLaw;
+import com.vominhtan1988.mybang.model.role.Sheriff;
+
+public class RolesFactory {
+	
+	private ArrayList<Role> roles;
+
+	public ArrayList<Role> getRoles() {
+		if (roles==null ){
+			roles = new ArrayList<Role>();
+			roles.add(new Sheriff());
+			roles.add(new OutLaw());
+			roles.add(new OutLaw());
+			roles.add(new OutLaw());
+			roles.add(new Deputy());
+			roles.add(new Deputy());
+		}
+		return roles;
+	}
+
+	private RolesFactory(){}
+	private static RolesFactory Instance;
+	public static RolesFactory getInstance() {
+		if (Instance== null){
+			Instance = new RolesFactory();
+		}
+		return Instance;
+
+	}
+}

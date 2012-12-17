@@ -1,0 +1,61 @@
+package com.vominhtan1988.mybang;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.assets.loaders.TextureAtlasLoader;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
+public class Resources {
+	
+	public Sprite background = new Sprite(new Texture(Gdx.files.internal("data/spritepack/background.dat")));
+	public Sprite logo = new Sprite(new Texture(Gdx.files.internal("data/spritepack/logo.png")));
+	public Sprite appaloosa = new Sprite(new Texture(Gdx.files.internal("data/spritepack/card/appaloosa.png")));	
+	
+	
+	public TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/spritepack/packhigh.pack"));
+		
+	public Sprite characterBack = atlas.createSprite("characterBack");
+	public Sprite playcardBack = atlas.createSprite("playcardBack");
+	public Sprite rolecardBack = atlas.createSprite("rolecardBack");
+	public Sprite r_sherriff = atlas.createSprite("r_sheriff");
+	public Sprite b_bang = atlas.createSprite("b_bang");
+	public Sprite b_volcanic = atlas.createSprite("b_volcanic");
+	public Sprite b_appaloosa = atlas.createSprite("b_appaloosa");
+	public Sprite c_willy_the_kid = atlas.createSprite("c_willy_the_kid");	
+	
+	public static Resources instance;
+
+	public static Resources getInstance() {
+		if (instance == null) {
+			instance = new Resources();
+		}
+		return instance;
+	}
+	
+	public Resources() {
+		
+		reInit();
+	}
+
+	public void reInit() {
+		dispose();			
+		Preferences prefs = Gdx.app.getPreferences("mybang");		
+		atlas = new TextureAtlas(Gdx.files.internal("data/spritepack/packhigh.pack"));
+		characterBack = atlas.createSprite("characterBack");
+		playcardBack = atlas.createSprite("playcardBack");
+		rolecardBack = atlas.createSprite("rolecardBack");
+		r_sherriff = atlas.createSprite("r_sheriff");
+		b_bang = atlas.createSprite("b_bang");		
+		c_willy_the_kid = atlas.createSprite("c_willy_the_kid");
+		b_volcanic = atlas.createSprite("b_volcanic");		
+		b_appaloosa = atlas.createSprite("b_appaloosa");
+	}
+
+	private void dispose() {
+		atlas.dispose();		
+	}
+
+}

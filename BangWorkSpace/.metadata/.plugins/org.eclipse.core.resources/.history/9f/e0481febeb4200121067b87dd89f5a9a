@@ -1,0 +1,162 @@
+package com.vominhtan1988.mybang.model;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Random;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.math.collision.Ray;
+import com.vominhtan1988.mybang.CameraEvent;
+import com.vominhtan1988.mybang.ICameraEventListener;
+import com.vominhtan1988.mybang.MyCamera;
+import com.vominhtan1988.mybang.model.cards.*;
+
+public class Deck extends SpriteBatch implements InputProcessor,ICameraEventListener{
+	private LinkedBlockingQueue<Card> cards = new LinkedBlockingQueue<Card>();
+	BoundingBox collisionDeck = new BoundingBox();
+	Ray collisionRay;
+	private Card endCard;
+	private Vector2 location = new Vector2(400,320);
+	public Deck() {			
+		this.getProjectionMatrix().set(MyCamera.cam.combined);
+		MyCamera.addCameraEventListener(this);		
+	}
+	public void init(){
+		for (int i=0;i<10;i++){
+			try {
+				Card temp = new Bang(location);
+				cards.put(temp);
+					
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}		
+		for (int i=0;i<2;i++){
+			try {
+				Card temp = new Volcanic(location);
+				cards.put(temp);
+				temp = new Appaloosa(location);
+				cards.put(temp);
+					
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		for (int i=0;i<2;i++){
+			try {
+				Card temp = new Appaloosa(location);
+				cards.put(temp);
+					
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}	
+		ArrayList<Card> temp1 = new ArrayList<Card>();
+		temp1.addAll(cards);
+		ArrayList<Card> temp2 = xaoBai(temp1);
+		cards.clear();
+		cards.addAll(temp2);
+		collisionDeck.set(new Vector3(cards.peek().getVertices()[0],cards.peek().getVertices()[1],-10),
+						  new Vector3(cards.peek().getVertices()[10], cards.peek().getVertices()[11], 10));		
+	}
+	public void draw(float delta){					
+		this.begin();		
+		if (!cards.isEmpty())
+		{								
+			cards.peek().draw(this);			
+		}
+		this.end();	
+	}
+	@Override
+	public boolean keyDown(int keycode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean keyUp(int keycode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean keyTyped(char character) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		collisionRay =  MyCamera.cam.getPickRay(screenX,screenY);		
+		if (Intersector.intersectRayBoundsFast(collisionRay, collisionDeck)) {
+			Card new_card = dispencard();
+			if (new_card!=null){
+				if (new_card instanceof EquipmentCard){
+					GameInstance.getInstance().players.get(0).addCardToEquipCard((new_card));
+				}
+				else if (new_card instanceof NormalCard){
+					GameInstance.getInstance().players.get(0).addCardToHandCard((new_card));
+				}
+				else{
+					GameInstance.getInstance().players.get(0).addCardToHandCard((new_card));				
+				}
+			}
+			
+		}
+		return false;
+	}
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		// TODO Auto-generated method stub		
+		return false;
+	}
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean scrolled(int amount) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean CameraEventHandler(CameraEvent event) {
+		this.getProjectionMatrix().set(MyCamera.cam.combined);		
+		return false;
+	}
+	
+	public Card dispencard() {
+		Card result = null;
+		if (!cards.isEmpty()){
+		this.cards.peek().setIsFaceUp(true);
+		result = this.cards.poll();		
+		//result.setTargetPosition(new Vector2(MathUtils.random(0,MyCamera.cam.viewportWidth), MathUtils.random(0,MyCamera.cam.viewportHeight)),MathUtils.random(-180, 180));
+		}
+		return result;
+	}
+	private ArrayList<Card> xaoBai(ArrayList<Card> cards){
+		ArrayList<Card> result = new ArrayList<Card>();
+		while (!cards.isEmpty()){
+			int index = MathUtils.random(0, cards.size()-1);
+			result.add(cards.get(index));
+			cards.remove(index);			
+		}
+		return result;		
+	}
+
+}

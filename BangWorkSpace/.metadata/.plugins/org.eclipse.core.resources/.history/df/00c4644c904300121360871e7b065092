@@ -1,0 +1,21 @@
+package com.vominhtan1988.mybang;
+
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+
+public class MyBangDesktop {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.title ="My Title";
+		   config.setFromDisplayMode(JoglApplicationConfiguration.getDesktopDisplayMode())
+		   new JoglApplication(new MyAppListener(), config);
+		new LwjglApplication(new MyBang(),"The Bang!",1280,800,true);
+		
+	}
+
+}
